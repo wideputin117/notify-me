@@ -1,22 +1,33 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
+    <title>Send Email</title>
     <script>
-        async function sendEmail() {
+        async function sendEmail(event) {
+            event.preventDefault();
+
+            const form = event.target;
+
+            const formData = {
+                to: document.getElementById('to').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
             try {
                 const response = await fetch('/send-email', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(formData)
                 });
 
                 if (response.ok) {
                     alert('Email sent successfully!');
+                    form.reset(); // Clear all the fields
                 } else {
                     alert('Failed to send email.');
                 }
@@ -27,7 +38,18 @@
     </script>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <button onclick="sendEmail()">Send Email</button>
+    <h1>Send Email</h1>
+    <form onsubmit="sendEmail(event)">
+        <label for="to">To:</label>
+        <input type="email" id="to" name="to" required><br><br>
+        
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required><br><br>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+        
+        <button type="submit">Send Email</button>
+    </form>
 </body>
 </html>

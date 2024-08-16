@@ -4,9 +4,11 @@ const Mailgun = require('mailgun.js');
 const dotenv = require('dotenv');
 const path = require('path');
 dotenv.config();
+ 
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(express.json());
 // Serve the static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -62,14 +64,16 @@ async function sendEmailWithRetry(emailData, retryCount = 3) {
 
 // Endpoint to trigger email sending
 app.post('/send-email', async (req, res) => {
+    const { to, subject, message } = req.body;
+
     const emailData = {
         domain: 'manish1178.work.gd',
         message: {
             from: "Excited User <mailgun@manish1178.work.gd>",
-            to: ["takermanish7@gmail.com"], // replace with your target email
-            subject: "Hello",
-            text: "Testing some Mailgun awesomeness!",
-            html: "<h1>Testing some Mailgun awesomeness!</h1>"
+            to: [to], // use the email address from the form
+            subject: subject, // use the subject from the form
+            text: message, // use the message from the form
+            html: `<h1>${message}</h1>` // use the message as HTML
         }
     };
 
