@@ -5,27 +5,28 @@ const dotenv = require('dotenv');
 const path = require('path');
 dotenv.config();
  
-
+// Initialized Express app
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
-// Serve the static files from the "public" directory
+
+// Serving the static file
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve the index.html file on the root route
+// Serving the index.html file on the root route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 
-// Initialize Express app
+ 
  
 
-// Initialize Mailgun primary client
+//  Mailgun primary client
 const mailgun = new Mailgun(formData);
 const mgPrimary = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'key-yourkeyhere'});
 
-// Initialize Mailgun backup client (if you have a second API key or domain)
+//  backup client
 const mgBackup = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'key-yourbackupkeyhere'});
 
 // Retry logic
